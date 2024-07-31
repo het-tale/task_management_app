@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { formSchema } from "@/lib/form-validation";
 
 import { useCreateUser } from "@/apiClient/hooks/useCreateUser";
+import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
+import { SignInUser } from "@/apiClient/services/signin-user";
 
 export default function AuthForm({ isLogin }: { isLogin: boolean }) {
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -26,8 +29,12 @@ export default function AuthForm({ isLogin }: { isLogin: boolean }) {
 		}
 	});
 	const { mutation } = useCreateUser();
+	const router = useRouter();
+	const { toast } = useToast();
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		const { email, password } = data;
 		if (!isLogin) mutation.mutate(data);
+		else SignInUser({ email, password, toast, router });
 	};
 	return (
 		<div className="flex flex-col justify-between w-full">
