@@ -13,11 +13,7 @@ import {
 	FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-	email: z.string().email("This is not a valid email"),
-	password: z.string().min(8, "a password must contain at least 8 characters")
-});
+import { formSchema } from "@/lib/form-validation";
 
 export default function AuthForm({ isLogin }: { isLogin: boolean }) {
 	const form = useForm<z.infer<typeof formSchema>>({
