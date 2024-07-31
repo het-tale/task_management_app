@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { formSchema } from "@/lib/form-validation";
 
+import { useCreateUser } from "@/apiClient/hooks/useCreateUser";
+
 export default function AuthForm({ isLogin }: { isLogin: boolean }) {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -23,9 +25,10 @@ export default function AuthForm({ isLogin }: { isLogin: boolean }) {
 			password: ""
 		}
 	});
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
-	}
+	const { mutation } = useCreateUser();
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		if (!isLogin) mutation.mutate(data);
+	};
 	return (
 		<div className="flex flex-col justify-between w-full">
 			<h1 className="m-auto text-2xl">{isLogin ? "Login!" : "Register!"}</h1>
